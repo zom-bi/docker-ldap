@@ -1,0 +1,49 @@
+# Create RootDN first:
+dn: @SUFFIX@
+objectClass: organization
+objectClass: top
+o: @ORGANIZATION@
+
+dn: ou=People,@SUFFIX@
+ou: people
+objectClass: organizationalUnit
+objectClass: top
+description: People associated with @ORGANIZATION@
+
+dn: ou=Services,ou=People,@SUFFIX@
+ou: services
+objectClass: organizationalUnit
+objectClass: top
+description: Accounts for services of @ORGANIZATION@
+
+dn: ou=Groups,@SUFFIX@
+ou: groups
+objectClass: organizationalUnit
+objectClass: top
+description: User groups within @ORGANIZATION@
+
+dn: ou=System,ou=Groups,@SUFFIX@
+ou: system
+objectClass: organizationalUnit
+objectClass: top
+description: Posix groups within @ORGANIZATION@
+
+dn: cn=user,ou=System,ou=Groups,@SUFFIX@
+cn: user
+objectClass: posixGroup
+objectClass: top
+gidNumber: 30000
+description: Default system user group
+
+dn: ou=Domains,@SUFFIX@
+ou: domains
+objectClass: organizationalUnit
+objectClass: top
+description: Domains controlled by @ORGANIZATION@
+
+dn: ou=Policies,@SUFFIX@
+ou: policies
+objectClass: organizationalUnit
+objectClass: top
+description: Password policies for @ORGANIZATION@
+

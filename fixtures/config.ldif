@@ -1,0 +1,156 @@
+# this file was adapted from the default /usr/share/slapd/slapd.init.ldif
+# Global config:
+dn: cn=config
+objectClass: olcGlobal
+cn: config
+olcPidFile: /var/run/slapd/slapd.pid
+# List of arguments that were passed to the server
+olcArgsFile: /var/run/slapd/slapd.args
+# Read slapd-config(5) for possible values
+olcLogLevel: none
+# The tool-threads parameter sets the actual amount of cpu's that is used
+# for indexing.
+olcToolThreads: 1
+
+# Frontend settings
+dn: olcDatabase={-1}frontend,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcFrontendConfig
+olcDatabase: {-1}frontend
+# The maximum number of entries that is returned for a search operation
+olcSizeLimit: 500
+# Allow unlimited access to local connection from the local root user
+olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
+# Allow unauthenticated read access for schema and base DN autodiscovery
+olcAccess: {1}to dn.exact="" by * read
+olcAccess: {2}to dn.base="cn=Subschema" by * read
+
+# Config db settings
+dn: olcDatabase=config,cn=config
+objectClass: olcDatabaseConfig
+olcDatabase: config
+# Allow unlimited access to local connection from the local root user
+olcAccess: to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
+olcRootDN: cn=admin,cn=config
+olcRootPW: @PASSWORD@
+
+# Load schemas
+dn: cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: schema
+
+# base schemas
+include: file:///etc/ldap/schema/core.ldif
+include: file:///etc/ldap/schema/cosine.ldif
+include: file:///etc/ldap/schema/nis.ldif
+include: file:///etc/ldap/schema/inetorgperson.ldif
+
+# additional schemas
+# include: file:///etc/ldap/schema/ppolicy.ldif
+#
+# Load module
+dn: cn=module{0},cn=config
+objectClass: olcModuleList
+cn: module{0}
+# Where the dynamically loaded modules are stored
+olcModulePath: /usr/lib/ldap
+olcModuleLoad: back_mdb
+
+# Load memberof module
+dn: cn=module{1},cn=config
+objectClass: olcModuleList
+objectClass: top
+cn: module{1}
+olcModulePath: /usr/lib/ldap
+olcModuleLoad: memberof.la
+
+# Load refint module
+dn: cn=module{2},cn=config
+objectClass: olcModuleList
+objectClass: top
+cn: module{2}
+olcModulePath: /usr/lib/ldap
+olcModuleLoad: refint.la
+
+# Set defaults for the backend
+dn: olcBackend=mdb,cn=config
+objectClass: olcBackendConfig
+olcBackend: mdb
+
+# The database definition.
+dn: olcDatabase=mdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcMdbConfig
+olcDatabase: mdb
+# Checkpoint the database periodically in case of system
+# failure and to speed slapd shutdown.
+olcDbCheckpoint: 512 30
+olcDbMaxSize: 1073741824
+# Save the time that the entry gets modified, for database #1
+olcLastMod: TRUE
+# The base of your directory in database #1
+olcSuffix: @SUFFIX@
+# Where the database file are physically stored for database #1
+olcDbDirectory: @DATADIR@
+# olcRootDN directive for specifying a superuser on the database. This
+# is needed for syncrepl.
+olcRootDN: cn=admin,@SUFFIX@
+olcRootPW: @PASSWORD@
+# Indexing options for database #1
+olcDbIndex: objectClass eq
+olcDbIndex: cn,uid eq
+olcDbIndex: uidNumber,gidNumber eq
+olcDbIndex: member,memberUid eq
+# additional attributes
+olcDbIndex: mail,associatedDomain eq
+olcDbIndex: memberOf eq
+# The userPassword by default can be changed by the entry owning it if
+# they are authenticated. Others should not be able to see it, except
+# the admin entry above.
+olcAccess: to attrs=userPassword
+  by self write
+  by anonymous auth
+  by * none
+# Allow update of authenticated user's shadowLastChange attribute.
+# Updating it on password change is implemented at least by libpam-ldap,
+# libpam-ldapd, and the slapo-smbk5pwd overlay.
+olcAccess: to attrs=shadowLastChange
+  by self write
+  by * read
+# ou=People users can see ou=People node
+olcAccess: to dn.exact="ou=People,@SUFFIX@"
+  by dn.subtree="ou=People,@SUFFIX@" read
+  by * break
+# User can only access their own profile
+# Services can read all User nodes
+olcAccess: to dn.subtree="ou=People,@SUFFIX@"
+  by self read
+  by dn.subtree="ou=Services,ou=People,@SUFFIX@" read
+  by * none
+# allow to read domain attributes for service accounts
+olcAccess: to dn.subtree="ou=Domains,@SUFFIX@"
+  by dn.subtree="ou=Services,ou=People,@SUFFIX@" read
+# The admin dn (olcRootDN) bypasses ACLs and so has total access,
+# everyone logged in can read everything.
+olcAccess: to *
+  by anonymous none
+  by * read
+
+# memberof overlay manages the memberOf attribute based on referential
+# groups
+dn: olcOverlay={0}memberof,olcDatabase={1}mdb,cn=config
+objectClass: olcConfig
+objectClass: olcMemberOf
+objectClass: olcOverlayConfig
+objectClass: top
+olcOverlay: memberof
+
+# refint overlay preserves referential integrety, by watching for renames of
+# referenced fields
+dn: olcOverlay={1}refint,olcDatabase={1}mdb,cn=config
+objectClass: olcConfig
+objectClass: olcOverlayConfig
+objectClass: olcRefintConfig
+objectClass: top
+olcOverlay: {1}refint
+olcRefintAttribute: memberof member manager owner

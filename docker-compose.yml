@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+    ldap:
+        build: .
+        ports:
+            - "3810:389"
+        environment:
+            - "ROOTPW=pass"
+            - "ORGANIZATION=zombi"
+            - "DATADIR=/data"
+            - "CONFDIR=/conf"
+        volumes:
+            - ./data/ldap/config:/conf
+            - ./data/ldap/data:/data
