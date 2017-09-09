@@ -47,3 +47,12 @@ objectClass: organizationalUnit
 objectClass: top
 description: Password policies for @ORGANIZATION@
 
+dn: cn=Default,ou=Policies,@SUFFIX@
+cn: default
+objectClass: top
+objectClass: pwdPolicy
+objectClass: organizationalRole
+pwdAttribute: userPassword
+pwdCheckQuality: 1
+pwdMinLength: 10
+description: Default password policy, if not otherwise specified
