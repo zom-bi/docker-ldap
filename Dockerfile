@@ -8,9 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive \
 # add our users and groups first to ensure their IDs get assigned consitently
 RUN groupadd -r -g 500 openldap && useradd -r -u 500 -g openldap openldap
 
-
-RUN \
-    apt-get update && \
+RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
         slapd \
         ldap-utils \
