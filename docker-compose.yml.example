@@ -6,10 +6,10 @@ networks:
 
 services:
     slapd:
-        build: docker.zom.bi/dockerfiles/ldap:latest
+        image: zombi/ldap:latest
         environment:
             - "ROOTPW=pass"
-            - "ORGANIZATION=zombi"
+            - "ORGANIZATION=example"
             - "DATADIR=/data"
             - "CONFDIR=/conf"
         volumes:
