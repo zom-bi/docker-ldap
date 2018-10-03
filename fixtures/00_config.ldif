@@ -14,6 +14,12 @@ olcToolThreads: 1
 # Define used format for CRYPT algorithm
 # (SHA-512 16-char-salt 50000 rounds)
 olcPasswordCryptSaltFormat: $6$rounds=50000$%.16s
+# TLS configuration
+olcTLSCertificateKeyFile: /etc/ssl/private/ssl-cert-snakeoil.key
+olcTLSCACertificateFile: /etc/ssl/certs/ca-certificates.crt
+olcTLSCertificateFile: /etc/ssl/certs/ssl-cert-snakeoil.pem
+# Consider to force Encryption:
+#olcSecurity: tls=1
 
 # Frontend settings
 dn: olcDatabase={-1}frontend,cn=config

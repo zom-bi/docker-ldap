@@ -12,7 +12,11 @@ RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
         slapd \
         ldap-utils \
+        gnutls-bin \
+        ssl-cert \
         ca-certificates && \
+    # allow access to certificates
+    usermod -a -G ssl-cert openldap && \
     # remove the default config, since the entrypoint
     # will populate it by hand.
     rm -rf /etc/ldap/slapd.d && \
