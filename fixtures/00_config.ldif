@@ -55,8 +55,10 @@ include: file:///etc/ldap/schema/core.ldif
 include: file:///etc/ldap/schema/cosine.ldif
 include: file:///etc/ldap/schema/nis.ldif
 include: file:///etc/ldap/schema/inetorgperson.ldif
-# additional schemas
+# ppolicy is required for enforcing a password policy
 include: file:///etc/ldap/schema/ppolicy.ldif
+# misc adds support for local mail users and aliases
+include: file:///etc/ldap/schema/misc.ldif
 
 # Load module
 dn: cn=module{0},cn=config
