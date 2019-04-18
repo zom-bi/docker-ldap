@@ -137,11 +137,12 @@ olcRootDN: cn=admin,@SUFFIX@
 olcRootPW: @PASSWORD@
 # Indexing options for database #1
 olcDbIndex: objectClass eq
-olcDbIndex: cn,uid eq
-olcDbIndex: uidNumber,gidNumber eq
+olcDbIndex: cn,uid eq,pres
+olcDbIndex: uidNumber,gidNumber eq,pres
 olcDbIndex: member,memberUid eq
 # additional attributes
-olcDbIndex: mail,associatedDomain eq
+olcDbIndex: mail,associatedDomain eq,pres
+olcDbIndex: mailLocalAddress,mailRoutingAddress eq,pres
 olcDbIndex: memberOf eq
 # The userPassword by default can be changed by the entry owning it if
 # they are authenticated. Others should not be able to see it, except
