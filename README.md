@@ -7,13 +7,21 @@ image.
 ### Building slapd
 
 ```
-docker build -t zombi/slapd .
+docker build -t zombi/ldap .
 ```
 
 ### Running slapd
 
+Copy over example configuration
+
+```bash
+cp docker-compose.yml{.example,}
 ```
-docker run -d --name ldap -v /data/ldap:/data -p 389:389 zombi/slapd
+
+run the service
+
+```
+docker-compose up -d
 ```
 
 ### Backing up data

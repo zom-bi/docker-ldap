@@ -1,8 +1,12 @@
-version: '2'
+version: "2.4"
 
 networks:
     net:
         driver: bridge
+
+volumes:
+    data:
+    conf:
 
 services:
     slapd:
@@ -13,5 +17,5 @@ services:
             - "DATADIR=/data"
             - "CONFDIR=/conf"
         volumes:
-            - ./data/ldap/config:/conf
-            - ./data/ldap/data:/data
+            - conf:/etc/ldap/slapd.d
+            - data:/var/lib/ldap
