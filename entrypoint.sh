@@ -6,12 +6,12 @@ CONFDIR=${CONFDIR:-'/etc/ldap/slapd.d'}
 DATADIR=${DATADIR:-'/var/lib/ldap'}
 
 if [[ -z "$ORGANIZATION" && -z "$SUFFIX" ]] ; then
-  fail 'neither ORGANIZATION nor SUFFIX supplied as environment var'
+	fail 'neither ORGANIZATION nor SUFFIX supplied as environment var'
 fi
 
 if [[ -n "$ORGANIZATION" ]] ; then
-  # if an organization was set, we can generate the RootDN from that
-  SUFFIX=${SUFFIX:-"o=${ORGANIZATION}"}
+	# if an organization was set, we can generate the RootDN from that
+	SUFFIX=${SUFFIX:-"o=${ORGANIZATION}"}
 fi
 
 function fail {
@@ -32,11 +32,13 @@ function configure {
 }
 
 function init_fixtures {
-  mkdir -p /docker-entrypoint-initdb.d
-  # if no files exist in this directory then copy example structure
-  if ! ls /docker-entrypoint-initdb.d/* 1> /dev/null 2>&1 ; then
-    cp /usr/share/slapd/fixtures/example_structure.ldif /docker-entrypoint-initdb.d/structure.ldif
-  fi
+	mkdir -p /docker-entrypoint-initdb.d
+	# if no files exist in this directory then copy example structure
+	if ! ls /docker-entrypoint-initdb.d/* 1> /dev/null 2>&1 ; then
+		cp \
+			/usr/share/slapd/fixtures/example_structure.ldif \
+			/docker-entrypoint-initdb.d/
+	fi
 
 	for f in /docker-entrypoint-initdb.d/*; do
 
