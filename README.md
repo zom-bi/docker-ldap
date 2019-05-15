@@ -4,7 +4,16 @@ services.
 Therefore, a lot of services have a direct (or indirect) dependency on this
 image.
 
+### Getting the image
+This image is automatically build and pushed to the docker hub. Therefore
+getting the image should be as easy as running
+
+```
+docker pull zombi/ldap
+```
+
 ### Building slapd
+It is also possible to manually build this image from this repository.
 
 ```
 docker build -t zombi/ldap .
@@ -25,14 +34,15 @@ docker-compose up -d
 ```
 
 ### Backing up data
-Data in this container is considered essential, since it influences almost
-all other services we run.
+State stored in this container is essential to many other services, that
+use authentication and authorization. Therefore you should think about
+backing up the LDAP database in regular intervals.
 
-We recently discovered that **simply copying all the data from `data` DOES
-NOT WORK**, therefore we included scripts for backing up the slapd database
-into a compact .ldif format.
+**simply copying all the data from `data` MAY NOT WORK**, as there could
+be race conditions leading to database corruption during the backup.
+The recommended way is to use the included script for backing up the database
+into a compact .ldif plain text file.
 
-running `tools/create-ldap-backup.sh` will create two files:
+running `contrib/create-ldap-backup.sh` will create two files:
 * `conf.ldif` is a backup of the configuration.
 * `data.ldif` contains all the saved datasets.
-
