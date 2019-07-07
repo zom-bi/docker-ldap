@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 EXPOSE 389
 
 ENV DEBIAN_FRONTEND noninteractive \
