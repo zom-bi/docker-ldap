@@ -47,6 +47,7 @@ function init_fixtures {
 				echo "$0: running $f"; . "$f"
 				;;
 			*.ldif)
+				echo "$0: applying $f"
 				sed \
 					-e "s|@SUFFIX@|${SUFFIX}|g" \
 					-e "s|@PASSWORD@|${ROOTPW}|g" \

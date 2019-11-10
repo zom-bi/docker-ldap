@@ -24,6 +24,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY entrypoint.sh /entrypoint.sh
+COPY scripts/ /
 COPY fixtures/ /usr/share/slapd/fixtures/
 
 ENTRYPOINT ["/entrypoint.sh"]

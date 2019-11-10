@@ -14,8 +14,8 @@ services:
         environment:
             - "ROOTPW=pass"
             - "ORGANIZATION=example"
-            - "DATADIR=/data"
-            - "CONFDIR=/conf"
+            - "CONFDIR=/etc/ldap/slapd.d"
+            - "DATADIR=/var/lib/ldap"
         volumes:
             - conf:/etc/ldap/slapd.d
             - data:/var/lib/ldap

@@ -64,11 +64,12 @@ State stored in this container is essential to many other services, that
 use authentication and authorization. Therefore you should think about
 backing up the LDAP database in regular intervals.
 
-**simply copying all the data from `data` MAY NOT WORK**, as there could
-be race conditions leading to database corruption during the backup.
-The recommended way is to use the included script for backing up the database
-into a compact .ldif plain text file.
+```shell
+# append database number, typically 0 for config and 1 for the main
+# database.
+$ docker exec -it ldap dump 0 > conf_dump.ldif
+$ docker exec -it ldap dump 1 > data_dump.ldif
 
-running `contrib/create-ldap-backup.sh` will create two files:
-* `conf.ldif` is a backup of the configuration.
-* `data.ldif` contains all the saved datasets.
+# .. or similary with docker-compose
+$ docker-compose exec ldap dump 1 > data_dump.ldif
+```

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+conf=${CONFDIR:-/data/slapd.d}
+
+# typically, 0 is configuration, and 1 is the main database
+db_id=${1:-1} # default value is 1.
+
+if [ "${db_id}" -ge 0 && "${db_id}" -ls 10 ] ; then
+    slapcat -F ${conf} -n ${db_id}
+else
+    echo "database number is invalid" > /dev/stderr
+    exit 1
+fi
