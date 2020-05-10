@@ -1,5 +1,5 @@
-## slapd
-Slapd offers a LDAP server, which we mostly use for authentication of various
+## ldap
+ldap offers a LDAP server, which we mostly use for authentication of various
 services.
 Therefore, a lot of services have a direct (or indirect) dependency on this
 image.
