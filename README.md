@@ -12,14 +12,14 @@ getting the image should be as easy as running
 docker pull zombi/ldap
 ```
 
-### Building slapd
+### Building ldap
 It is also possible to manually build this image from this repository.
 
 ```
 docker build -t zombi/ldap .
 ```
 
-### Running slapd
+### Running ldap
 
 Copy over example configuration
 
