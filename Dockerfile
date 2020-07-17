@@ -1,5 +1,5 @@
 FROM debian:buster
-EXPOSE 389
+EXPOSE 389/tcp
 
 ENV DEBIAN_FRONTEND noninteractive \
     CONFDIR /etc/ldap/slapd.d \
@@ -18,7 +18,7 @@ RUN apt-get update && \
     # allow access to certificates
     usermod -a -G ssl-cert openldap && \
     # remove the default config, since the entrypoint
-    # will populate it by hand.
+    # will populate it automatically.
     rm -rf /etc/ldap/slapd.d && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
